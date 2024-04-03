@@ -34,9 +34,9 @@ String.prototype.plus = function (str) {
     return res;
 };
 
-console.log('127'.plus('4566')); // Output: 4693
-console.log('1275145'.plus('4566')); // Output: 1279711
-console.log('984'.plus('123')); // Output: 1279711
+// console.log('127'.plus('4566')); // Output: 4693
+// console.log('1275145'.plus('4566')); // Output: 1279711
+// console.log('984'.plus('123')); // Output: 1279711
 
 
 
@@ -53,46 +53,52 @@ String.prototype.minus = function (str) {
     let res = '';
     let borrow = 0;
     let prefix = '';
-    let differenceBetweenLenths = base.length - str.length;
-    let absDifferenceBetween = Math.abs(differenceBetweenLenths);
+    let differenceBetweenLengths = base.length - str.length;
+    let absDifferenceBetween = Math.abs(differenceBetweenLengths);
+    
     for (let i = 0; i < absDifferenceBetween; i++) {
-        prefix += 0
+        prefix += '0';
     }
 
-    if (differenceBetweenLenths < 0) {
-        base = prefix + base
+    if (differenceBetweenLengths < 0) {
+        base = prefix + base;
     }
-    if (differenceBetweenLenths > 0) {
-        str = prefix + str
+    if (differenceBetweenLengths > 0) {
+        str = prefix + str;
     }
 
     for (let i = base.length - 1; i >= 0; i--) {
-        let a = ''
-        let temp = 0
-        if (base[i] < str[i]) {
-            a = `1${base[i]}`
-            temp = a - str[i] - borrow
-            borrow = 1
+        let digitBase = parseInt(base[i]);
+        let digitStr = parseInt(str[i]);
+        let temp = 0;
+
+        if (digitBase < digitStr + borrow) {
+            temp = 10 + digitBase - digitStr - borrow;
+            borrow = 1;
         } else {
-            temp = base[i] - str[i] - borrow
-            borrow = 0
+            temp = digitBase - digitStr - borrow;
+            borrow = 0;
         }
 
-        res = temp + res
+        res = temp + res;
     }
-    res = parseInt(res)
 
-    return res.toString();
+    return res.replace(/^0+/, ''); 
 };
+
 
 console.log('456'.minus('123')); // Output: 333
 console.log('123'.minus('456')); // Output: error
 console.log('123'.minus('123')); // Output: 0
-console.log('456417'.minus('123')); // Output: 333
-console.log('17'.minus('8')); // Output: 333
-console.log('177'.minus('88')); // Output: 333
-console.log('13'.minus('8')); // Output: 333
-
+console.log('456417'.minus('123')); // Output: 456294
+console.log('17'.minus('8')); // Output: 9
+console.log('177'.minus('88')); // Output: 89
+console.log('13'.minus('8')); // Output: 5
+console.log('4444444444444444444444444444444440'.minus('2')); // Output: 4444444444444444444444444444444438
+console.log('12345'.minus('0')); // Output: 12345
+console.log('100000000000000000000000'.minus('100000000000000000000000')); // Output: 0
+console.log('100000000000000000000000'.minus('99999999999999999999999')); // Output: 1
+console.log('1000'.minus('1')); // Output: 999
 
 String.prototype.divide = function (str) {
     if (str === "0") {
@@ -127,13 +133,13 @@ String.prototype.divide = function (str) {
     return quotient || '0';
 };
 
-console.log('1000'.divide('10')); // Output: 100
-console.log('24'.divide('8')); // Output: 100
-console.log('1500'.divide('35')); // Output: 100
-console.log('1200'.divide('4')); // Output: 100
-console.log('18'.divide('5')); // Output: 100
-console.log('18'.divide('0')); // Output: 100
-console.log('1000000000000000000000'.divide('123'))
+// console.log('1000'.divide('10')); // Output: 100
+// console.log('24'.divide('8')); // Output: 100
+// console.log('1500'.divide('35')); // Output: 100
+// console.log('1200'.divide('4')); // Output: 100
+// console.log('18'.divide('5')); // Output: 100
+// console.log('18'.divide('0')); // Output: 100
+// console.log('1000000000000000000000'.divide('123'))
 
 
 String.prototype.multiply = function(str) {
@@ -155,5 +161,5 @@ String.prototype.multiply = function(str) {
     return res === '' ? '0' : res;
 };
 
-console.log('123'.multiply('456')); // Output: 56088
-console.log('100000000000000000000000'.multiply('99999999999999999999999'));
+// console.log('123'.multiply('456')); // Output: 56088
+// console.log('100000000000000000000000'.multiply('99999999999999999999999'));
