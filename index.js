@@ -82,7 +82,7 @@ String.prototype.minus = function (str) {
     }
     res = parseInt(res)
 
-    return res;
+    return res.toString();
 };
 
 console.log('456'.minus('123')); // Output: 333
@@ -94,22 +94,37 @@ console.log('177'.minus('88')); // Output: 333
 console.log('13'.minus('8')); // Output: 333
 
 
-
 String.prototype.divide = function (str) {
-    if (str === 0) {
-        return 'Division by zero'
+    if (str === "0") {
+        return 'Division by zero';
     }
 
-    let dividend = Number(this);
-    let divisor = Number(str);
-    let quotient = 0;
+    let dividend = this.toString(); // Конвертація до рядка
+    let quotient = '';
+    let currentDividend = '';
+    let i = 0;
 
-    while (dividend >= divisor) {
-        dividend -= divisor;
-        quotient++;
+    while (i < dividend.length) {
+        currentDividend += dividend[i];
+        i++;
+
+        while (currentDividend[0] === '0' && currentDividend.length > 1) {
+            currentDividend = currentDividend.slice(1);
+        }
+
+        let currentQuotient = '0';
+
+        while (+currentDividend >= +str) {
+            currentDividend = currentDividend.minus(str);
+       
+            currentQuotient = (currentQuotient * 1 + 1).toString();
+        }
+        quotient += currentQuotient;
     }
 
-    return quotient.toString();
+    quotient = quotient.replace(/^0+/, '');
+
+    return quotient || '0';
 };
 
 console.log('1000'.divide('10')); // Output: 100
@@ -117,18 +132,28 @@ console.log('24'.divide('8')); // Output: 100
 console.log('1500'.divide('35')); // Output: 100
 console.log('1200'.divide('4')); // Output: 100
 console.log('18'.divide('5')); // Output: 100
+console.log('18'.divide('0')); // Output: 100
+console.log('1000000000000000000000'.divide('123'))
 
 
-
-String.prototype.multiply = function (str) {
-    let res = '0';
+String.prototype.multiply = function(str) {
     let base = this.toString();
-    for (let i = '0'; +i < +str; i=i.plus('1')) {
-        res = res.plus(base);
+    let multiplier = str.toString();
+    let len1 = base.length;
+    let len2 = multiplier.length;
+    let pos = new Array(len1 + len2).fill(0);
+    
+    for (let i = len1 - 1; i >= 0; i--) {
+        for (let j = len2 - 1; j >= 0; j--) {
+            let mul = (base[i].charCodeAt(0) - '0'.charCodeAt(0)) * (multiplier[j].charCodeAt(0) - '0'.charCodeAt(0));
+            let sum = mul + pos[i + j + 1];
+            pos[i + j] += Math.floor(sum / 10);
+            pos[i + j + 1] = sum % 10;
+        }
     }
-
-    return res;
+    let res = (pos.join('')).replace(/^0+(?!$)/, '');
+    return res === '' ? '0' : res;
 };
 
-
 console.log('123'.multiply('456')); // Output: 56088
+console.log('100000000000000000000000'.multiply('99999999999999999999999'));
